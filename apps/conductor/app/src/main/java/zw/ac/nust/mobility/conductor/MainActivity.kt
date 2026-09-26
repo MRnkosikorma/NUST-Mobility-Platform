@@ -113,27 +113,32 @@ private val NustTypography = Typography(
 )
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  COLOUR SYSTEM — NUST brand
+//  ONE UI 6 COLOUR SYSTEM — NUST brand & ergonomic palette
 // ══════════════════════════════════════════════════════════════════════════════
-private val NUSTBlue       = Color(0xFF0C6CA4)
-private val NUSTSky        = Color(0xFF00C6FB)
-private val Background     = Color(0xFF060C1A)
-private val SurfaceCard    = Color(0xFF0F1829)
-private val GlassWhite     = Color(0x14FFFFFF)
-private val CardEdge       = Color(0xFF1A2540)
+private val CyberTurquoise = Color(0xFF06B6D4)   // Primary Action Accent
+private val ElectricBlue   = Color(0xFF3B82F6)   // Structural Accent
+private val DeepPurple     = Color(0xFF8B5CF6)   // Premium HMAC Security Accent
+private val EmeraldGreen   = Color(0xFF10B981)   // Success / Active Balance
+private val WarmOrange     = Color(0xFFF97316)   // Pending / Warning Status
+private val RichCrimson    = Color(0xFFDC2626)   // Alert / Error State
+private val PitchBlack     = Color(0xFF000000)   // Pitch Black Background
+private val DeepSlate      = Color(0xFF060C1A)   // Page Background
+private val SurfaceCard    = Color(0xFF0F1829)   // Focus Block Card Background
+private val GlassWhite     = Color(0x14FFFFFF)   // Glassmorphism surface
+private val CardEdge       = Color(0xFF1A2F4D)   // Focus Block Border
 private val OnLight        = Color(0xFFFFFFFF)
 private val Muted          = Color(0xFFB0BBC8)
-private val GreenOk        = Color(0xFF10B981)
-private val RedAlert       = Color(0xFFEF4444)
-private val Amber          = Color(0xFFF59E0B)
+private val GreenOk        = EmeraldGreen
+private val RedAlert       = RichCrimson
+private val Amber          = WarmOrange
 private val AmberSurface   = Color(0xFF1C1600)
-private val OfflineBanner  = Color(0xFFF59E0B)   // amber for offline header
+private val OfflineBanner  = WarmOrange
 
 private val SchemeConductDark = darkColorScheme(
-    primary      = NUSTSky,
+    primary      = CyberTurquoise,
     onPrimary    = Color.Black,
-    secondary    = NUSTBlue,
-    background   = Background,
+    secondary    = ElectricBlue,
+    background   = PitchBlack,
     surface      = SurfaceCard,
     onBackground = OnLight,
     onSurface    = OnLight,
@@ -142,9 +147,9 @@ private val SchemeConductDark = darkColorScheme(
 )
 
 private val SchemeConductLight = androidx.compose.material3.lightColorScheme(
-    primary      = NUSTBlue,
+    primary      = ElectricBlue,
     onPrimary    = Color.White,
-    secondary    = Color(0xFF0096C7),
+    secondary    = CyberTurquoise,
     background   = Color(0xFFF4F6F9),
     surface      = Color(0xFFFFFFFF),
     onBackground = Color(0xFF111827),
@@ -154,8 +159,8 @@ private val SchemeConductLight = androidx.compose.material3.lightColorScheme(
 )
 
 // Shared gradient brushes
-private val HeroBrush get() = Brush.linearGradient(listOf(NUSTBlue, NUSTSky))
-private val CardBrush get() = Brush.linearGradient(listOf(NUSTSky.copy(alpha = 0.5f), CardEdge))
+private val HeroBrush get() = Brush.linearGradient(listOf(ElectricBlue, CyberTurquoise))
+private val CardBrush get() = Brush.linearGradient(listOf(CyberTurquoise.copy(alpha = 0.5f), CardEdge))
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  NFC TRANSACTION STATES  (mirrors the 6-step flow diagram)
@@ -908,9 +913,9 @@ private fun NfcScannerCard(vm: ConductorViewModel, step: NfcFlowStep, onStep: (N
                         },
                         modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
                         shape    = RoundedCornerShape(16.dp),
-                        colors   = ButtonDefaults.buttonColors(containerColor = NUSTBlue)
+                        colors   = ButtonDefaults.buttonColors(containerColor = CyberTurquoise)
                     ) {
-                        Text("Simulate Tap", fontFamily = Roboto, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = OnLight)
+                        Text("Simulate Tap", fontFamily = Roboto, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
                     }
                 }
                 NfcFlowStep.WAITING -> {
@@ -935,14 +940,14 @@ private fun NfcScannerCard(vm: ConductorViewModel, step: NfcFlowStep, onStep: (N
                     }
                 }
                 NfcFlowStep.SUCCESS -> {
-                    // "Scan Next" button
+                    // "SCAN NEXT PASS" button
                     Button(
                         onClick  = { onStep(NfcFlowStep.READY) },
                         modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
                         shape    = RoundedCornerShape(16.dp),
-                        colors   = ButtonDefaults.buttonColors(containerColor = NUSTBlue)
+                        colors   = ButtonDefaults.buttonColors(containerColor = CyberTurquoise)
                     ) {
-                        Text("Scan Next", fontFamily = Roboto, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = OnLight)
+                        Text("SCAN NEXT PASS", fontFamily = Roboto, fontWeight = FontWeight.Bold, fontSize = 15.sp, color = Color.Black)
                     }
                 }
             }
@@ -1264,8 +1269,8 @@ private fun OfflineQueueScreen(vm: ConductorViewModel) {
 @Composable
 private fun GlassCard(content: @Composable () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().border(1.dp, CardEdge, RoundedCornerShape(20.dp)),
-        shape    = RoundedCornerShape(20.dp),
+        modifier = Modifier.fillMaxWidth().border(1.dp, CardEdge, RoundedCornerShape(28.dp)),
+        shape    = RoundedCornerShape(28.dp),
         colors   = CardDefaults.cardColors(containerColor = SurfaceCard)
     ) { content() }
 }

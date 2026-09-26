@@ -112,27 +112,31 @@ private val NustTypography = Typography(
 )
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  COLOUR SYSTEM — NUST brand palette (nust.ac.zw live CSS)
+//  ONE UI 6 COLOUR SYSTEM — NUST brand & ergonomic palette
 // ══════════════════════════════════════════════════════════════════════════════
-private val NUSTSky        = Color(0xFF00C6FB)   // primary accent / glows
-private val NUSTBlue       = Color(0xFF0C6CA4)   // structural chrome
-private val NUSTDeep       = Color(0xFF063D60)   // deepest nav / card chrome
-private val Background     = Color(0xFF060C1A)   // page background
-private val SurfaceCard    = Color(0xFF0F1829)   // card background
-private val GlassWhite     = Color(0x14FFFFFF)   // glassmorphism surface
-private val CardEdge       = Color(0xFF1A2540)   // subtle card border
+private val CyberTurquoise = Color(0xFF06B6D4)   // Primary Action Accent
+private val ElectricBlue   = Color(0xFF3B82F6)   // Structural Accent
+private val DeepPurple     = Color(0xFF8B5CF6)   // Premium HMAC Security Accent
+private val EmeraldGreen   = Color(0xFF10B981)   // Success / Active Balance
+private val WarmOrange     = Color(0xFFF97316)   // Pending / Warning Status
+private val RichCrimson    = Color(0xFFDC2626)   // Alert / Error State
+private val PitchBlack     = Color(0xFF000000)   // Pitch Black Background
+private val DeepSlate      = Color(0xFF060C1A)   // Page Background
+private val SurfaceCard    = Color(0xFF0F1829)   // Focus Block Card Background
+private val GlassWhite     = Color(0x14FFFFFF)   // Glassmorphism surface
+private val CardEdge       = Color(0xFF1A2F4D)   // Focus Block Border
 private val OnLight        = Color(0xFFFFFFFF)
 private val Muted          = Color(0xFFB0BBC8)
-private val GreenOk        = Color(0xFF10B981)
-private val RedAlert       = Color(0xFFEF4444)
-private val Amber          = Color(0xFFF59E0B)
+private val GreenOk        = EmeraldGreen
+private val RedAlert       = RichCrimson
+private val Amber          = WarmOrange
 private val AmberSurface   = Color(0xFF1C1600)
 
 private val SchemeStudentDark = darkColorScheme(
-    primary      = NUSTSky,
+    primary      = CyberTurquoise,
     onPrimary    = Color.Black,
-    secondary    = NUSTBlue,
-    background   = Background,
+    secondary    = ElectricBlue,
+    background   = PitchBlack,
     surface      = SurfaceCard,
     onBackground = OnLight,
     onSurface    = OnLight,
@@ -141,9 +145,9 @@ private val SchemeStudentDark = darkColorScheme(
 )
 
 private val SchemeStudentLight = androidx.compose.material3.lightColorScheme(
-    primary      = NUSTBlue,
+    primary      = ElectricBlue,
     onPrimary    = Color.White,
-    secondary    = Color(0xFF0096C7),
+    secondary    = CyberTurquoise,
     background   = Color(0xFFF4F6F9),
     surface      = Color(0xFFFFFFFF),
     onBackground = Color(0xFF111827),
@@ -153,8 +157,8 @@ private val SchemeStudentLight = androidx.compose.material3.lightColorScheme(
 )
 
 // Reusable gradients
-private val HeroBrush  get() = Brush.linearGradient(listOf(NUSTBlue, NUSTSky))
-private val CardBrush  get() = Brush.linearGradient(listOf(NUSTSky.copy(alpha = 0.6f), CardEdge))
+private val HeroBrush  get() = Brush.linearGradient(listOf(ElectricBlue, CyberTurquoise))
+private val CardBrush  get() = Brush.linearGradient(listOf(CyberTurquoise.copy(alpha = 0.5f), CardEdge))
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  ACTIVITY
@@ -381,7 +385,7 @@ private fun NustBottomBar(selectedTab: Int, onTabSelected: (Int) -> Unit) {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-//  SCREEN 1 — HOME  (mirrors "Home 01 of 04" Figma frame)
+//  SCREEN 1 — HOME (One UI 6 Ergonomic 30/70 View/Interaction Split)
 // ══════════════════════════════════════════════════════════════════════════════
 @Composable
 private fun HomeScreen(vm: StudentViewModel) {
@@ -391,17 +395,51 @@ private fun HomeScreen(vm: StudentViewModel) {
     ) {
         item { Spacer(Modifier.height(4.dp)) }
 
-        // ── Hero balance card ─────────────────────────────────────────────────
+        // ── TOP 30% VIEWING AREA: Large Header & Student Avatar ───────────────
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        "NUST Transport",
+                        fontFamily = Roboto,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp,
+                        color = OnLight,
+                        letterSpacing = (-0.5).sp
+                    )
+                    Text(
+                        "Wallet & Boarding Pass",
+                        fontFamily = Roboto,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 28.sp,
+                        color = CyberTurquoise,
+                        letterSpacing = (-0.5).sp
+                    )
+                }
+                Box(
+                    modifier = Modifier.size(52.dp).clip(CircleShape).background(HeroBrush).border(2.dp, CyberTurquoise.copy(alpha = 0.4f), CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("NK", fontFamily = Roboto, fontWeight = FontWeight.Bold, color = OnLight, fontSize = 18.sp)
+                }
+            }
+        }
+
+        // ── BOTTOM 70% INTERACTION AREA: One UI 6 Squircle Focus Blocks ───────
         item {
             Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape    = RoundedCornerShape(24.dp),
-                colors   = CardDefaults.cardColors(containerColor = Color.Transparent)
+                modifier = Modifier.fillMaxWidth().border(1.dp, CardEdge, RoundedCornerShape(28.dp)),
+                shape    = RoundedCornerShape(28.dp),
+                colors   = CardDefaults.cardColors(containerColor = SurfaceCard)
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(HeroBrush, RoundedCornerShape(24.dp))
+                        .background(HeroBrush, RoundedCornerShape(28.dp))
                         .padding(24.dp)
                 ) {
                     Column {
@@ -415,11 +453,11 @@ private fun HomeScreen(vm: StudentViewModel) {
                             Spacer(Modifier.width(12.dp))
                             Column {
                                 Text("Hello,", fontFamily = Roboto, fontSize = 12.sp, color = OnLight.copy(alpha = 0.75f))
-                                Text("Nkosivathi", fontFamily = Roboto, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = OnLight)
+                                Text("Nkosivathi Kema", fontFamily = Roboto, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = OnLight)
                             }
                         }
                         Spacer(Modifier.height(20.dp))
-                        Text("NFC Pass Award", fontFamily = Roboto, fontSize = 11.sp, color = OnLight.copy(alpha = 0.7f))
+                        Text("Available Transport Balance", fontFamily = Roboto, fontSize = 12.sp, color = OnLight.copy(alpha = 0.8f))
                         Text(
                             vm.formattedBalance(),
                             fontFamily  = Roboto,
@@ -427,20 +465,18 @@ private fun HomeScreen(vm: StudentViewModel) {
                             fontSize    = 38.sp,
                             color       = OnLight
                         )
-                        Spacer(Modifier.height(4.dp))
-                        Text("Available Balance", fontFamily = Roboto, fontSize = 12.sp, color = OnLight.copy(alpha = 0.75f))
                         Spacer(Modifier.height(16.dp))
-                        // Quick top-up row
+                        // Quick top-up row with Cyber-Turquoise pill buttons
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             listOf("+$1" to 100, "+$2" to 200, "+$5" to 500).forEach { (label, amt) ->
                                 Box(
                                     modifier = Modifier
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .background(GlassWhite)
+                                        .clip(RoundedCornerShape(12.dp))
+                                        .background(CyberTurquoise)
                                         .clickable { vm.mockTopUp(amt) }
-                                        .padding(horizontal = 14.dp, vertical = 8.dp)
+                                        .padding(horizontal = 16.dp, vertical = 10.dp)
                                 ) {
-                                    Text(label, fontFamily = Roboto, fontWeight = FontWeight.Bold, color = OnLight, fontSize = 13.sp)
+                                    Text(label, fontFamily = Roboto, fontWeight = FontWeight.Bold, color = Color.Black, fontSize = 13.sp)
                                 }
                             }
                         }
@@ -938,12 +974,12 @@ private fun LinkedAccountRow(initial: String, name: String, sub: String, active:
 //  SHARED COMPONENTS
 // ══════════════════════════════════════════════════════════════════════════════
 
-/** Glassmorphism card wrapper */
+/** One UI 6 Focus Block Card wrapper with 28dp squircle curvature */
 @Composable
 private fun GlassCard(content: @Composable () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().border(1.dp, CardEdge, RoundedCornerShape(20.dp)),
-        shape    = RoundedCornerShape(20.dp),
+        modifier = Modifier.fillMaxWidth().border(1.dp, CardEdge, RoundedCornerShape(28.dp)),
+        shape    = RoundedCornerShape(28.dp),
         colors   = CardDefaults.cardColors(containerColor = SurfaceCard)
     ) { content() }
 }
@@ -970,21 +1006,29 @@ private fun NfcStatusBadge(state: NfcState) {
     }
 }
 
-/** Centred QR placeholder inside the countdown ring */
+/** Centred QR placeholder inside the countdown ring with Deep Purple HMAC badge */
 @Composable
 private fun QrGraphicBox(id: String) = Box(
-    modifier = Modifier.size(175.dp).background(OnLight, RoundedCornerShape(18.dp)).padding(10.dp),
+    modifier = Modifier.size(175.dp).background(OnLight, RoundedCornerShape(22.dp)).padding(10.dp),
     contentAlignment = Alignment.Center
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
-            modifier         = Modifier.size(125.dp).background(Background, RoundedCornerShape(10.dp)),
+            modifier         = Modifier.size(125.dp).background(PitchBlack, RoundedCornerShape(14.dp)),
             contentAlignment = Alignment.Center
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("QR TICKET",   color = NUSTSky,  textAlign = TextAlign.Center, fontFamily = Roboto, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                Text("QR TICKET", color = CyberTurquoise, textAlign = TextAlign.Center, fontFamily = Roboto, fontWeight = FontWeight.Bold, fontSize = 13.sp)
                 Spacer(Modifier.height(4.dp))
-                Text("HMAC SIGNED", color = OnLight.copy(alpha = 0.6f), textAlign = TextAlign.Center, fontFamily = Roboto, fontSize = 9.sp)
+                // Deep Purple HMAC badge
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(DeepPurple)
+                        .padding(horizontal = 8.dp, vertical = 3.dp)
+                ) {
+                    Text("HMAC SHA-256", color = Color.White, textAlign = TextAlign.Center, fontFamily = Roboto, fontWeight = FontWeight.Bold, fontSize = 9.sp)
+                }
             }
         }
         Spacer(Modifier.height(4.dp))
