@@ -1,0 +1,28 @@
+{
+  "name": "nust-mobility-platform",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.4",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "pnpm run format:check && pnpm run lint && pnpm run typecheck && pnpm run test",
+    "dev:api": "pnpm build && node dist/apps/api/src/server.js",
+    "format": "prettier --write apps packages tests docs/api eslint.config.mjs package.json pnpm-workspace.yaml tsconfig.json",
+    "format:check": "prettier --check apps packages tests docs/api eslint.config.mjs package.json pnpm-workspace.yaml tsconfig.json",
+    "lint": "eslint .",
+    "start:api": "node dist/apps/api/src/server.js",
+    "test": "pnpm build && NODE_ENV=test node --test dist/tests/unit/*.test.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.48.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "@types/node": "^22.10.7",
+    "eslint": "^9.19.0",
+    "prettier": "^3.5.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.22.0"
+  }
+}

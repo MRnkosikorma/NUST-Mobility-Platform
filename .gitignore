@@ -1,0 +1,34 @@
+# Node & Dependencies
+node_modules/
+dist/
+coverage/
+
+# Environment & Secrets
+.env
+.env.local
+*.env
+
+# Python & virtual environments
+.venv/
+__pycache__/
+*.pyc
+
+# JDK & Toolchains
+jdk-17.0.13+11/
+
+# Gradle & Android Build Artifacts
+.gradle/
+build/
+bin/
+gen/
+*.apk
+*.aar
+*.keystore
+local.properties
+.kotlin/
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+.DS_Store

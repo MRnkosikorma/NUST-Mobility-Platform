@@ -1,0 +1,6 @@
+dist
+build
+**/build/**
+node_modules
+jdk-17*
+.gradle
