@@ -594,6 +594,177 @@
     </style>
   </head>
   <body>
+    <!-- MUNDO STARTUP SPLASH SCREEN OVERLAY -->
+    <div
+      id="mundo-splash-screen"
+      style="
+        position: fixed;
+        inset: 0;
+        z-index: 99999;
+        background: #000000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        padding: 3rem 2rem;
+        transition:
+          opacity 0.5s ease,
+          visibility 0.5s ease;
+      "
+    >
+      <div style="flex: 1"></div>
+
+      <!-- Center Logo & Branding -->
+      <div
+        style="
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        "
+      >
+        <div
+          style="
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            box-shadow: 0 0 50px rgba(255, 45, 55, 0.35);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+          "
+        >
+          <img
+            src="mundo_logo.png"
+            alt="Mundo Logo"
+            style="width: 100%; height: 100%; object-fit: cover"
+          />
+        </div>
+        <h1
+          style="
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.4rem;
+          "
+        >
+          Mundo Platform
+        </h1>
+        <p style="font-size: 0.9rem; color: #9e9e9e; font-weight: 500">
+          NUST Campus Mobility Platform
+        </p>
+      </div>
+
+      <div style="flex: 1"></div>
+
+      <!-- Bottom 3D Glossy Red Capsule Progress Bar -->
+      <div style="width: 100%; max-width: 440px; margin-bottom: 1.5rem">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.6rem;
+            font-size: 0.8rem;
+          "
+        >
+          <span id="splash-status-text" style="color: #b0bbc8; font-weight: 500"
+            >Initializing System...</span
+          >
+          <span
+            id="splash-progress-percent"
+            style="color: #ff4d4d; font-weight: 700"
+            >0%</span
+          >
+        </div>
+
+        <!-- Recessed Dark Capsule Track -->
+        <div
+          style="
+            width: 100%;
+            height: 26px;
+            background: #12141a;
+            border: 1px solid #222632;
+            border-radius: 999px;
+            padding: 3px;
+            box-sizing: border-box;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
+          "
+        >
+          <!-- 3D Glossy Red Capsule Progress Fill -->
+          <div
+            id="splash-progress-bar"
+            style="
+              width: 0%;
+              height: 100%;
+              border-radius: 999px;
+              background: linear-gradient(
+                180deg,
+                #ff6b6b 0%,
+                #e61c24 50%,
+                #9e0b11 100%
+              );
+              box-shadow: 0 0 16px rgba(255, 45, 55, 0.7);
+              position: relative;
+              transition: width 0.35s ease;
+            "
+          >
+            <!-- 3D Top Gloss Sheen -->
+            <div
+              style="
+                position: absolute;
+                top: 1px;
+                left: 6px;
+                right: 6px;
+                height: 5px;
+                border-radius: 999px;
+                background: linear-gradient(
+                  180deg,
+                  rgba(255, 255, 255, 0.6) 0%,
+                  rgba(255, 255, 255, 0.05) 100%
+                );
+                pointer-events: none;
+              "
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        var splash = document.getElementById("mundo-splash-screen");
+        var bar = document.getElementById("splash-progress-bar");
+        var percentText = document.getElementById("splash-progress-percent");
+        var statusText = document.getElementById("splash-status-text");
+
+        var steps = [
+          { p: 25, status: "Initializing Platform Engine..." },
+          { p: 60, status: "Loading Campus Routes & Fares..." },
+          { p: 88, status: "Syncing Double-Entry Ledger..." },
+          { p: 100, status: "System Ready" },
+        ];
+
+        var stepIdx = 0;
+        var interval = setInterval(function () {
+          if (stepIdx < steps.length) {
+            var step = steps[stepIdx];
+            bar.style.width = step.p + "%";
+            percentText.innerText = step.p + "%";
+            statusText.innerText = step.status;
+            stepIdx++;
+          } else {
+            clearInterval(interval);
+            setTimeout(function () {
+              splash.style.opacity = "0";
+              splash.style.visibility = "hidden";
+            }, 350);
+          }
+        }, 450);
+      })();
+    </script>
+
     <!-- NAV -->
     <nav>
       <a class="nav-logo" href="/">

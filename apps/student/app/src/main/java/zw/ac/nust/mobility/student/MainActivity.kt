@@ -18,6 +18,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,10 +58,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
+import androidx.compose.animation.togetherWith
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -183,10 +188,31 @@ class MainActivity : ComponentActivity() {
             val systemDark = androidx.compose.foundation.isSystemInDarkTheme()
             var isDarkTheme by remember { mutableStateOf(systemDark) }
             val colors = if (isDarkTheme) SchemeStudentDark else SchemeStudentLight
+            var showSplash by remember { mutableStateOf(true) }
 
             MaterialTheme(colorScheme = colors, typography = NustTypography) {
-                Surface(modifier = Modifier.fillMaxSize(), color = colors.background) {
-                    StudentApp(studentViewModel, isDarkTheme = isDarkTheme, onToggleTheme = { isDarkTheme = !isDarkTheme })
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = if (showSplash) Color.Black else colors.background
+                ) {
+                    androidx.compose.animation.AnimatedContent(
+                        targetState = showSplash,
+                        transitionSpec = { fadeIn(tween(400)) togetherWith fadeOut(tween(400)) },
+                        label = "splashTransition"
+                    ) { splash ->
+                        if (splash) {
+                            MundoSplashScreen(
+                                appName = "Mundo Student",
+                                onFinished = { showSplash = false }
+                            )
+                        } else {
+                            StudentApp(
+                                studentViewModel,
+                                isDarkTheme = isDarkTheme,
+                                onToggleTheme = { isDarkTheme = !isDarkTheme }
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -981,3 +1007,185 @@ private fun PilotBanner() = Box(
         fontFamily = Roboto, fontSize = 12.sp, color = Amber
     )
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  STARTUP SCREEN & 3D GLOSSY RED CAPSULE PROGRESS BAR
+// ══════════════════════════════════════════════════════════════════════════════
+
+/** 3D Glossy Red Capsule Progress Bar with pitch-black overlay container */
+@Composable
+fun MundoCapsuleProgressBar(
+    progress: Float,
+    modifier: Modifier = Modifier
+) {
+    val animatedProgress by animateFloatAsState(
+        targetValue = progress.coerceIn(0f, 1f),
+        animationSpec = tween(durationMillis = 350, easing = LinearEasing),
+        label = "capsuleProgress"
+    )
+
+    // Dark recessed track container (capsule shape)
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(28.dp)
+            .clip(RoundedCornerShape(999.dp))
+            .background(Color(0xFF12141A))
+            .border(1.dp, Color(0xFF222632), RoundedCornerShape(999.dp))
+            .padding(3.dp),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        if (animatedProgress > 0.01f) {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .fillMaxWidth(animatedProgress)
+                    .shadow(
+                        elevation = 10.dp,
+                        shape = RoundedCornerShape(999.dp),
+                        ambientColor = Color(0xFFFF2D37),
+                        spotColor = Color(0xFFFF2D37)
+                    )
+                    .clip(RoundedCornerShape(999.dp))
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFFFF6B6B), // Top gloss shine highlight
+                                Color(0xFFE61C24), // Middle vibrant red
+                                Color(0xFF9E0B11)  // Bottom dark depth shadow
+                            )
+                        )
+                    )
+            ) {
+                // Top white gloss sheen (3D plastic highlight line)
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(6.dp)
+                        .padding(horizontal = 6.dp)
+                        .clip(RoundedCornerShape(999.dp))
+                        .background(
+                            Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.White.copy(alpha = 0.55f),
+                                    Color.White.copy(alpha = 0.05f)
+                                )
+                            )
+                        )
+                )
+            }
+        }
+    }
+}
+
+/** Pitch black startup splash screen with centered logo & 3D glossy capsule progress bar */
+@Composable
+fun MundoSplashScreen(
+    appName: String = "Mundo Student",
+    onFinished: () -> Unit
+) {
+    var progress by remember { mutableFloatStateOf(0f) }
+    var statusText by remember { mutableStateOf("Initializing System...") }
+
+    LaunchedEffect(Unit) {
+        statusText = "Initializing NFC Security Kernel..."
+        progress = 0.25f
+        delay(450L)
+
+        statusText = "Loading Campus Routes & Fares..."
+        progress = 0.60f
+        delay(550L)
+
+        statusText = "Syncing Mobility Ledger..."
+        progress = 0.88f
+        delay(450L)
+
+        statusText = "System Ready"
+        progress = 1.0f
+        delay(350L)
+
+        onFinished()
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF000000)), // Pitch black matching logo background
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(32.dp)
+        ) {
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Mundo Logo Image
+            Image(
+                painter = painterResource(id = R.drawable.mundo_logo),
+                contentDescription = "Mundo Logo",
+                modifier = Modifier
+                    .size(160.dp)
+                    .shadow(16.dp, CircleShape, ambientColor = Color.Red, spotColor = Color.Red)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                text = appName,
+                fontFamily = Roboto,
+                fontWeight = FontWeight.Bold,
+                fontSize = 28.sp,
+                color = Color.White,
+                letterSpacing = 1.sp
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "NUST Campus Mobility Platform",
+                fontFamily = Roboto,
+                fontSize = 13.sp,
+                color = Color(0xFF9E9E9E)
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Progress Section at Bottom
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 36.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = statusText,
+                        fontFamily = Roboto,
+                        fontSize = 12.sp,
+                        color = Color(0xFFB0BBC8)
+                    )
+                    Text(
+                        text = "${(progress * 100).toInt()}%",
+                        fontFamily = Roboto,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        color = Color(0xFFFF4D4D)
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                // 3D Capsule progress bar
+                MundoCapsuleProgressBar(progress = progress)
+            }
+        }
+    }
+}
+
